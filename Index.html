@@ -1,1 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
 
+  <title>Kniffel</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f2f2f7;
+      color: #111;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 25px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    #status {
+      color: #666;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .dice {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .die {
+      aspect-ratio: 1;
+      background: white;
+      border-radius: 16px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: clamp(40px, 11vw, 60px);
+
+      border: 3px solid transparent;
+
+      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+
+      user-select: none;
+      cursor: pointer;
+
+      transition: 0.15s;
+    }
+
+    .die:active {
+      transform: scale(0.92);
+    }
+
+    .die.held {
+      border-color: #007aff;
+      background: #e8f2ff;
+      transform: translateY(-7px);
+    }
+
+    #hint {
+      min-height: 25px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+
+      padding: 18px;
+
+      background: #007aff;
+      color: white;
+
+      font-size: 21px;
+      font-weight: bold;
+
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <h1>🎲 Kniffel</h1>
+
+  <div id="status">
+    Wurf 0 von 3
+  </div>
+
+  <div class="dice" id="dice"></div>
+
+  <div id="hint">
+    Drücke auf „Würfeln“.
+  </div>
+
+  <button id="rollButton">
+    Würfeln
+  </button>
+
+</div>
+
+<script>
+
+const diceContainer = document.getElementById("dice");
+const rollButton = document.getElementById("rollButton");
+const statusText = document.getElementById("status");
+const hintText = document.getElementById("hint");
+
+let dice = [1,1,1,1,1];
+
+let held = [
+  false,
+  false,
+  false,
+  false,
+  false
+];
+
+let rollCount = 0;
+
+const faces = {
+  1: "⚀",
+  2: "⚁",
+  3: "⚂",
+  4: "⚃",
+  5: "⚄",
+  6: "⚅"
+};
+
+
+function drawDice() {
+
+  diceContainer.innerHTML = "";
+
+  dice.forEach((value,index) => {
+
+    const die = document.createElement("div");
+
+    die.className = "die";
+
+    if(held[index]) {
+      die.classList.add("held");
+    }
+
+    die.textContent = faces[value];
+
+    die.onclick = () => {
+
+      if(rollCount === 0) return;
+
+      held[index] = !held[index];
+
+      drawDice();
+    };
+
+    diceContainer.appendChild(die);
+
+  });
+
+}
+
+
+function updateStatus() {
+
+  statusText.textContent =
+    "Wurf " + rollCount + " von 3";
+
+  if(rollCount === 0) {
+
+    hintText.textContent =
+      "Drücke auf „Würfeln“.";
+
+  }
+
+  else if(rollCount < 3) {
+
+    hintText.textContent =
+      "Tippe Würfel an, die du behalten möchtest.";
+
+  }
+
+  else {
+
+    hintText.textContent =
+      "Runde beendet – beim nächsten Würfeln startet eine neue Runde.";
+
+  }
+
+}
+
+
+function newRound() {
+
+  held = [
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+
+  rollCount = 0;
+
+}
+
+
+function rollDice() {
+
+  if(rollCount === 3) {
+
+    newRound();
+
+  }
+
+  dice = dice.map((value,index) => {
+
+    if(held[index]) {
+      return value;
+    }
+
+    return Math.floor(Math.random()*6)+1;
+
+  });
+
+  rollCount++;
+
+  drawDice();
+
+  updateStatus();
+
+}
+
+
+rollButton.onclick = rollDice;
+
+
+drawDice();
+
+updateStatus();
+
+</script>
+
+</body>
+</html>
