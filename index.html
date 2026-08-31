@@ -1,275 +1,1538 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Kniffel</title>
 
-  
-<title>Bennis Kniffel</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+<style>
+:root{
+  --bg:#f4f4f7;
+  --card:#fff;
+  --text:#111;
+  --muted:#6d6d72;
+  --line:#d9d9df;
+  --accent:#0a84ff;
+  --accentSoft:#e9f3ff;
+  --good:#198754;
+  --danger:#c9362b;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f2f2f7;
-      color: #111;
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
 
-      display: flex;
-      justify-content: center;
-      align-items: center;
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
 
-      padding: 25px;
-    }
+button,input{
+  font:inherit;
+}
 
-    .app {
-      width: 100%;
-      max-width: 500px;
-      text-align: center;
-    }
+.screen{
+  display:none;
+  min-height:100vh;
+}
 
-    h1 {
-      font-size: 34px;
-      margin-bottom: 8px;
-    }
+.screen.active{
+  display:block;
+}
 
-    #status {
-      color: #666;
-      font-size: 18px;
-      margin-bottom: 30px;
-    }
+/* STARTBILDSCHIRM */
 
-    .dice {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin-bottom: 30px;
-    }
+.start-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
 
-    .die {
-      aspect-ratio: 1;
-      background: white;
-      border-radius: 16px;
+.start-card{
+  width:min(460px,100%);
+  background:#fff;
+  border-radius:24px;
+  padding:28px 22px;
+  box-shadow:0 2px 10px #0001;
+  text-align:center;
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+.logo{
+  font-size:54px;
+}
 
-      font-size: clamp(40px, 11vw, 60px);
+.start-card h1{
+  margin:6px 0 4px;
+  font-size:34px;
+}
 
-      border: 3px solid transparent;
+.subtitle{
+  color:var(--muted);
+  margin-bottom:24px;
+}
 
-      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+.label{
+  text-align:left;
+  font-size:14px;
+  color:var(--muted);
+  font-weight:800;
+  margin:16px 0 8px;
+}
 
-      user-select: none;
-      cursor: pointer;
+.player-count{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
 
-      transition: 0.15s;
-    }
+.count-btn{
+  border:2px solid var(--line);
+  background:#fff;
+  border-radius:14px;
+  padding:14px 0;
+  font-size:19px;
+  font-weight:900;
+}
 
-    .die:active {
-      transform: scale(0.92);
-    }
+.count-btn.selected{
+  border-color:var(--accent);
+  background:var(--accentSoft);
+  color:var(--accent);
+}
 
-    .die.held {
-      border-color: #007aff;
-      background: #e8f2ff;
-      transform: translateY(-7px);
-    }
+.names{
+  display:grid;
+  gap:10px;
+}
 
-    #hint {
-      min-height: 25px;
-      color: #666;
-      margin-bottom: 20px;
-    }
+.names input{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  font-size:17px;
+}
 
-    button {
-      width: 100%;
-      border: none;
-      border-radius: 16px;
+.primary{
+  width:100%;
+  margin-top:20px;
+  border:0;
+  border-radius:15px;
+  padding:16px;
+  background:var(--accent);
+  color:white;
+  font-weight:900;
+  font-size:19px;
+}
 
-      padding: 18px;
+/* SPIEL */
 
-      background: #007aff;
-      color: white;
+.game{
+  max-width:760px;
+  margin:auto;
+  padding-bottom:90px;
+}
 
-      font-size: 21px;
-      font-weight: bold;
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#f4f4f7f2;
+  backdrop-filter:blur(10px);
+  padding:8px 10px 7px;
+  border-bottom:1px solid var(--line);
+}
 
-      cursor: pointer;
-    }
+.turn-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:7px;
+}
 
-    button:active {
-      transform: scale(0.98);
-    }
-  </style>
+.turn-label{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.turn-name{
+  font-size:21px;
+  font-weight:950;
+}
+
+.roll-status{
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* WÜRFEL */
+
+.dice-row{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+}
+
+.die{
+  aspect-ratio:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border:2px solid transparent;
+  border-radius:13px;
+  box-shadow:0 2px 8px #0001;
+  font-size:clamp(34px,10vw,52px);
+  user-select:none;
+}
+
+.die.held{
+  border-color:var(--accent);
+  background:var(--accentSoft);
+  transform:translateY(-3px);
+}
+
+.die.disabled{
+  opacity:.45;
+}
+
+.action-row{
+  display:grid;
+  grid-template-columns:1fr 48px;
+  gap:8px;
+  margin-top:8px;
+}
+
+.roll-btn{
+  border:0;
+  border-radius:13px;
+  padding:12px;
+  background:var(--accent);
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+}
+
+.menu-btn{
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fff;
+  font-size:21px;
+}
+
+.hint{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+  min-height:15px;
+}
+
+/* TABELLE */
+
+.score-wrap{
+  padding:10px 8px 0;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+table{
+  border-collapse:separate;
+  border-spacing:0;
+  width:100%;
+  min-width:410px;
+  table-layout:fixed;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 2px 10px #0001;
+}
+
+th,td{
+  height:40px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:0;
+  text-align:center;
+}
+
+tr:last-child th,
+tr:last-child td{
+  border-bottom:0;
+}
+
+th:last-child,
+td:last-child{
+  border-right:0;
+}
+
+.cat-col{
+  width:110px;
+  text-align:left;
+  padding:0 7px;
+  font-size:12px;
+  font-weight:900;
+  background:#fafafa;
+  position:sticky;
+  left:0;
+  z-index:4;
+}
+
+.player-head{
+  font-size:12px;
+  font-weight:900;
+  padding:5px 3px;
+  background:#fafafa;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.player-head.current{
+  background:var(--accentSoft);
+  color:var(--accent);
+}
+
+.score-cell{
+  font-size:15px;
+  font-weight:850;
+  background:#fff;
+  min-width:75px;
+}
+
+.score-cell.current-col{
+  background:#fbfdff;
+}
+
+.score-cell.suggestion{
+  color:var(--accent);
+  background:var(--accentSoft);
+  cursor:pointer;
+}
+
+.score-cell.suggestion.zero{
+  color:#9a9a9f;
+}
+
+.score-cell.selected{
+  outline:3px solid var(--accent);
+  outline-offset:-3px;
+  background:#dcecff;
+}
+
+.section-row .cat-col,
+.section-row td{
+  height:29px;
+  background:#ececf1;
+  font-size:11px;
+  font-weight:900;
+  text-transform:uppercase;
+  color:#555;
+}
+
+.summary-row .cat-col,
+.summary-row td{
+  height:33px;
+  background:#f7f7f9;
+  font-size:12px;
+  font-weight:900;
+}
+
+.grand-row .cat-col,
+.grand-row td{
+  height:39px;
+  background:#efeff4;
+  font-size:14px;
+  font-weight:950;
+}
+
+/* BESTÄTIGUNG UNTEN */
+
+.confirm-bar{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:18;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  background:#f4f4f7f5;
+  border-top:1px solid var(--line);
+}
+
+.confirm-inner{
+  max-width:744px;
+  margin:auto;
+  display:grid;
+  gap:6px;
+}
+
+.selection-text{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:8px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.confirm-btn{
+  border:0;
+  border-radius:13px;
+  padding:13px;
+  background:var(--good);
+  color:#fff;
+  font-weight:900;
+  font-size:17px;
+}
+
+.confirm-btn:disabled{
+  background:#b9b9be;
+}
+
+/* MENÜ */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#0006;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:50;
+}
+
+.modal.open{
+  display:flex;
+}
+
+.sheet{
+  width:min(560px,100%);
+  background:#fff;
+  border-radius:22px 22px 0 0;
+  padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+}
+
+.sheet h2{
+  margin:0 0 12px;
+}
+
+.sheet button{
+  width:100%;
+  border:0;
+  border-radius:13px;
+  padding:14px;
+  margin-top:9px;
+  font-weight:850;
+}
+
+.secondary{
+  background:#efeff4;
+}
+
+.danger{
+  background:#ffe8e6;
+  color:var(--danger);
+}
+</style>
 </head>
 
 <body>
 
-<div class="app">
+<!-- START -->
 
-  <h1>🎲 Kniffel</h1>
+<section id="startScreen" class="screen active">
 
-  <div id="status">
-    Wurf 0 von 3
-  </div>
+<div class="start-wrap">
 
-  <div class="dice" id="dice"></div>
+<div class="start-card">
 
-  <div id="hint">
-    Drücke auf „Würfeln“.
-  </div>
+<div class="logo">🎲</div>
 
-  <button id="rollButton">
-    Würfeln
-  </button>
+<h1>Kniffel</h1>
+
+<div class="subtitle">
+1 bis 4 Spieler
+</div>
+
+<div class="label">
+Anzahl Spieler
+</div>
+
+<div class="player-count">
+
+<button class="count-btn" data-count="1">1</button>
+
+<button class="count-btn" data-count="2">2</button>
+
+<button class="count-btn selected" data-count="3">3</button>
+
+<button class="count-btn" data-count="4">4</button>
 
 </div>
 
+<div class="label">
+Spielernamen
+</div>
+
+<div id="nameInputs" class="names"></div>
+
+<button id="startGameBtn" class="primary">
+Spiel starten
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SPIEL -->
+
+<section id="gameScreen" class="screen">
+
+<div class="game">
+
+<div class="topbar">
+
+<div class="turn-row">
+
+<div>
+
+<div class="turn-label">
+Am Zug
+</div>
+
+<div id="turnName" class="turn-name"></div>
+
+</div>
+
+<div id="rollStatus" class="roll-status"></div>
+
+</div>
+
+
+<div id="diceRow" class="dice-row"></div>
+
+
+<div class="action-row">
+
+<button id="rollBtn" class="roll-btn">
+Würfeln
+</button>
+
+<button id="menuBtn" class="menu-btn">
+⋯
+</button>
+
+</div>
+
+
+<div id="hint" class="hint"></div>
+
+</div>
+
+
+<div class="score-wrap">
+
+<table id="scoreTable"></table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BESTÄTIGUNG -->
+
+<div
+id="confirmBar"
+class="confirm-bar"
+style="display:none"
+>
+
+<div class="confirm-inner">
+
+<div
+id="selectionText"
+class="selection-text"
+>
+Noch keine Kategorie gewählt
+</div>
+
+<button
+id="confirmBtn"
+class="confirm-btn"
+disabled
+>
+Eintragen & nächster Spieler
+</button>
+
+</div>
+
+</div>
+
+
+<!-- MENÜ -->
+
+<div id="menuModal" class="modal">
+
+<div class="sheet">
+
+<h2>Spiel</h2>
+
+<button
+id="closeMenuBtn"
+class="secondary"
+>
+Weiter spielen
+</button>
+
+<button
+id="newGameBtn"
+class="danger"
+>
+Neues Spiel starten
+</button>
+
+</div>
+
+</div>
+
+
 <script>
 
-const diceContainer = document.getElementById("dice");
-const rollButton = document.getElementById("rollButton");
-const statusText = document.getElementById("status");
-const hintText = document.getElementById("hint");
+(()=>{
 
-let dice = [1,1,1,1,1];
+const cats=[
 
-let held = [
-  false,
-  false,
-  false,
-  false,
-  false
+{id:'ones',label:'Einser',sec:'u'},
+{id:'twos',label:'Zweier',sec:'u'},
+{id:'threes',label:'Dreier',sec:'u'},
+{id:'fours',label:'Vierer',sec:'u'},
+{id:'fives',label:'Fünfer',sec:'u'},
+{id:'sixes',label:'Sechser',sec:'u'},
+
+{id:'threeKind',label:'Dreierpasch',sec:'l'},
+{id:'fourKind',label:'Viererpasch',sec:'l'},
+{id:'fullHouse',label:'Full House',sec:'l'},
+{id:'smallStraight',label:'Kl. Straße',sec:'l'},
+{id:'largeStraight',label:'Gr. Straße',sec:'l'},
+{id:'kniffel',label:'Kniffel',sec:'l'},
+{id:'chance',label:'Chance',sec:'l'}
+
 ];
 
-let rollCount = 0;
 
-const faces = {
-  1: "⚀",
-  2: "⚁",
-  3: "⚂",
-  4: "⚃",
-  5: "⚄",
-  6: "⚅"
+let pc=3;
+
+let players=[];
+
+let scores=[];
+
+let cur=0;
+
+let dice=[1,1,1,1,1];
+
+let held=[
+false,
+false,
+false,
+false,
+false
+];
+
+let rolls=0;
+
+let sel=null;
+
+let selVal=null;
+
+
+const $=id=>
+document.getElementById(id);
+
+
+const start=$('startScreen');
+
+const game=$('gameScreen');
+
+const names=$('nameInputs');
+
+const startBtn=$('startGameBtn');
+
+const turnName=$('turnName');
+
+const rollStatus=$('rollStatus');
+
+const diceRow=$('diceRow');
+
+const rollBtn=$('rollBtn');
+
+const hint=$('hint');
+
+const table=$('scoreTable');
+
+const selText=$('selectionText');
+
+const confirmBtn=$('confirmBtn');
+
+const confirmBar=$('confirmBar');
+
+const modal=$('menuModal');
+
+
+/* SPIELERNAMEN */
+
+function renderNames(){
+
+names.innerHTML='';
+
+for(let i=0;i<pc;i++){
+
+let x=document.createElement('input');
+
+x.value=`Spieler ${i+1}`;
+
+x.maxLength=14;
+
+names.appendChild(x);
+
+}
+
+}
+
+
+/* SPIELERANZAHL */
+
+document
+.querySelectorAll('.count-btn')
+.forEach(b=>{
+
+b.onclick=()=>{
+
+pc=+b.dataset.count;
+
+document
+.querySelectorAll('.count-btn')
+.forEach(x=>
+x.classList.toggle(
+'selected',
+x===b
+)
+);
+
+renderNames();
+
+};
+
+});
+
+
+renderNames();
+
+
+/* SPIEL STARTEN */
+
+startBtn.onclick=()=>{
+
+players=[
+...names.querySelectorAll('input')
+].map(
+(x,i)=>
+x.value.trim() ||
+`Spieler ${i+1}`
+);
+
+
+scores=players.map(
+()=>
+Object.fromEntries(
+cats.map(
+c=>[c.id,null]
+)
+)
+);
+
+
+cur=0;
+
+resetTurn();
+
+start.classList.remove('active');
+
+game.classList.add('active');
+
+confirmBar.style.display='block';
+
+renderAll();
+
 };
 
 
-function drawDice() {
+/* WÜRFEL AUSWERTEN */
 
-  diceContainer.innerHTML = "";
+function cnt(){
 
-  dice.forEach((value,index) => {
+let c=[
+0,0,0,0,0,0,0
+];
 
-    const die = document.createElement("div");
+dice.forEach(
+v=>c[v]++
+);
 
-    die.className = "die";
-
-    if(held[index]) {
-      die.classList.add("held");
-    }
-
-    die.textContent = faces[value];
-
-    die.onclick = () => {
-
-      if(rollCount === 0) return;
-
-      held[index] = !held[index];
-
-      drawDice();
-    };
-
-    diceContainer.appendChild(die);
-
-  });
+return c;
 
 }
 
 
-function updateStatus() {
+function sum(){
 
-  statusText.textContent =
-    "Wurf " + rollCount + " von 3";
-
-  if(rollCount === 0) {
-
-    hintText.textContent =
-      "Drücke auf „Würfeln“.";
-
-  }
-
-  else if(rollCount < 3) {
-
-    hintText.textContent =
-      "Tippe Würfel an, die du behalten möchtest.";
-
-  }
-
-  else {
-
-    hintText.textContent =
-      "Runde beendet – beim nächsten Würfeln startet eine neue Runde.";
-
-  }
+return dice.reduce(
+(a,b)=>a+b,
+0
+);
 
 }
 
 
-function newRound() {
+function small(){
 
-  held = [
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
+let s=[
+...new Set(dice)
+]
+.sort()
+.join('');
 
-  rollCount = 0;
-
-}
-
-
-function rollDice() {
-
-  if(rollCount === 3) {
-
-    newRound();
-
-  }
-
-  dice = dice.map((value,index) => {
-
-    if(held[index]) {
-      return value;
-    }
-
-    return Math.floor(Math.random()*6)+1;
-
-  });
-
-  rollCount++;
-
-  drawDice();
-
-  updateStatus();
+return(
+s.includes('1234') ||
+s.includes('2345') ||
+s.includes('3456')
+);
 
 }
 
 
-rollButton.onclick = rollDice;
+function large(){
+
+let s=[
+...new Set(dice)
+]
+.sort()
+.join('');
+
+return(
+s==='12345' ||
+s==='23456'
+);
+
+}
 
 
-drawDice();
+/* PUNKTE BERECHNEN */
 
-updateStatus();
+function val(id){
+
+let c=cnt();
+
+let s=sum();
+
+switch(id){
+
+case'ones':
+return c[1];
+
+case'twos':
+return c[2]*2;
+
+case'threes':
+return c[3]*3;
+
+case'fours':
+return c[4]*4;
+
+case'fives':
+return c[5]*5;
+
+case'sixes':
+return c[6]*6;
+
+case'threeKind':
+return c.some(n=>n>=3)
+?s
+:0;
+
+case'fourKind':
+return c.some(n=>n>=4)
+?s
+:0;
+
+case'fullHouse':
+return(
+c.includes(3) &&
+c.includes(2)
+)
+?25
+:0;
+
+case'smallStraight':
+return small()
+?30
+:0;
+
+case'largeStraight':
+return large()
+?40
+:0;
+
+case'kniffel':
+return c.includes(5)
+?50
+:0;
+
+case'chance':
+return s;
+
+}
+
+}
+
+
+/* SUMMEN */
+
+function upper(i){
+
+return[
+'ones',
+'twos',
+'threes',
+'fours',
+'fives',
+'sixes'
+]
+.reduce(
+(a,id)=>
+a+(scores[i][id]??0),
+0
+);
+
+}
+
+
+function bonus(i){
+
+return upper(i)>=63
+?35
+:0;
+
+}
+
+
+function lower(i){
+
+return[
+'threeKind',
+'fourKind',
+'fullHouse',
+'smallStraight',
+'largeStraight',
+'kniffel',
+'chance'
+]
+.reduce(
+(a,id)=>
+a+(scores[i][id]??0),
+0
+);
+
+}
+
+
+function total(i){
+
+return(
+upper(i)+
+bonus(i)+
+lower(i)
+);
+
+}
+
+
+/* WÜRFEL ZEICHNEN */
+
+function renderDice(){
+
+diceRow.innerHTML='';
+
+dice.forEach(
+(v,i)=>{
+
+let d=
+document.createElement('div');
+
+d.className=
+'die'+
+(held[i]
+?' held'
+:'')+
+(rolls===0
+?' disabled'
+:'');
+
+
+d.textContent=
+[
+'',
+'⚀',
+'⚁',
+'⚂',
+'⚃',
+'⚄',
+'⚅'
+][v];
+
+
+d.onclick=()=>{
+
+if(
+rolls===0 ||
+rolls>=3
+)
+return;
+
+held[i]=!held[i];
+
+renderDice();
+
+};
+
+
+diceRow.appendChild(d);
+
+});
+
+}
+
+
+/* OBERER BEREICH */
+
+function renderTop(){
+
+turnName.textContent=
+players[cur];
+
+
+rollStatus.textContent=
+`Wurf ${rolls} / 3`;
+
+
+if(rolls===0){
+
+hint.textContent=
+'Drücke auf „Würfeln“.';
+
+rollBtn.textContent=
+'Würfeln';
+
+}
+
+else if(rolls<3){
+
+hint.textContent=
+'Würfel antippen = behalten. Kategorie kann schon gewählt werden.';
+
+rollBtn.textContent=
+`Würfeln (${3-rolls} übrig)`;
+
+}
+
+else{
+
+hint.textContent=
+'Wähle jetzt eine freie Kategorie.';
+
+rollBtn.textContent=
+'Keine Würfe mehr';
+
+}
+
+
+rollBtn.disabled=
+rolls>=3;
+
+
+rollBtn.style.opacity=
+rolls>=3
+?'.5'
+:'1';
+
+}
+
+
+/* TABELLENZEILE */
+
+function row(cat){
+
+let r=
+`<tr>
+<th class="cat-col">
+${cat.label}
+</th>`;
+
+
+players.forEach(
+(_,i)=>{
+
+let old=
+scores[i][cat.id];
+
+let isCur=
+i===cur;
+
+
+if(old!==null){
+
+r+=
+`<td class="score-cell">
+${old}
+</td>`;
+
+}
+
+else if(
+isCur &&
+rolls>0
+){
+
+let v=
+val(cat.id);
+
+
+r+=
+`<td
+class="score-cell suggestion
+${v===0?'zero':''}
+${sel===cat.id?'selected':''}"
+data-cat="${cat.id}"
+data-val="${v}">
+${v}
+</td>`;
+
+}
+
+else{
+
+r+=
+`<td class="score-cell
+${isCur?'current-col':''}">
+–
+</td>`;
+
+}
+
+});
+
+
+return r+'</tr>';
+
+}
+
+
+/* SUMMENZEILE */
+
+function summary(
+label,
+fn,
+grand=false
+){
+
+let r=
+`<tr class="
+${grand
+?'grand-row'
+:'summary-row'}
+">
+<th class="cat-col">
+${label}
+</th>`;
+
+
+players.forEach(
+(_,i)=>
+r+=
+`<td>
+${fn(i)}
+</td>`
+);
+
+
+return r+'</tr>';
+
+}
+
+
+/* TABELLE */
+
+function renderTable(){
+
+let h=
+'<thead><tr>'+
+'<th class="cat-col">'+
+'Kategorie'+
+'</th>';
+
+
+players.forEach(
+(p,i)=>
+h+=
+`<th class="player-head
+${i===cur?'current':''}">
+${esc(p)}
+</th>`
+);
+
+
+h+=
+'</tr></thead><tbody>';
+
+
+h+=
+'<tr class="section-row">'+
+'<th class="cat-col">'+
+'Oberer Block'+
+'</th>'+
+players
+.map(()=>'<td></td>')
+.join('')+
+'</tr>';
+
+
+cats
+.filter(c=>c.sec==='u')
+.forEach(
+c=>h+=row(c)
+);
+
+
+h+=
+summary(
+'Zwischensumme',
+upper
+);
+
+
+h+=
+summary(
+'Bonus ab 63',
+bonus
+);
+
+
+h+=
+'<tr class="section-row">'+
+'<th class="cat-col">'+
+'Unterer Block'+
+'</th>'+
+players
+.map(()=>'<td></td>')
+.join('')+
+'</tr>';
+
+
+cats
+.filter(c=>c.sec==='l')
+.forEach(
+c=>h+=row(c)
+);
+
+
+h+=
+summary(
+'Gesamt',
+total,
+true
+);
+
+
+h+='</tbody>';
+
+
+table.innerHTML=h;
+
+
+/* ANKLICKBARE VORSCHLÄGE */
+
+table
+.querySelectorAll('.suggestion')
+.forEach(
+td=>{
+
+td.onclick=()=>{
+
+sel=
+td.dataset.cat;
+
+selVal=
++td.dataset.val;
+
+renderTable();
+
+renderSelection();
+
+};
+
+});
+
+}
+
+
+/* AUSWAHL UNTEN */
+
+function renderSelection(){
+
+if(sel===null){
+
+selText.textContent=
+'Noch keine Kategorie gewählt';
+
+confirmBtn.disabled=
+true;
+
+}
+
+else{
+
+let c=
+cats.find(
+x=>x.id===sel
+);
+
+selText.textContent=
+`${c.label}: ${selVal} Punkte eintragen`;
+
+confirmBtn.disabled=
+false;
+
+}
+
+}
+
+
+/* ALLES AKTUALISIEREN */
+
+function renderAll(){
+
+renderDice();
+
+renderTop();
+
+renderTable();
+
+renderSelection();
+
+}
+
+
+/* WÜRFELN */
+
+rollBtn.onclick=()=>{
+
+if(rolls>=3)
+return;
+
+
+dice=dice.map(
+(v,i)=>
+held[i]
+?v
+:Math.floor(
+Math.random()*6
+)+1
+);
+
+
+rolls++;
+
+sel=null;
+
+selVal=null;
+
+renderAll();
+
+};
+
+
+/* PUNKTE EINTRAGEN */
+
+confirmBtn.onclick=()=>{
+
+if(
+sel===null ||
+rolls===0
+)
+return;
+
+
+scores[cur][sel]=
+selVal;
+
+
+/* SPIELENDE */
+
+if(
+scores.every(
+p=>
+cats.every(
+c=>
+p[c.id]!==null
+)
+)
+){
+
+renderAll();
+
+setTimeout(
+()=>{
+
+let result=
+players
+.map(
+(p,i)=>
+`${p}: ${total(i)} Punkte`
+)
+.join('\n');
+
+
+alert(
+'Spiel beendet!\n\n'+
+result
+);
+
+},
+100
+);
+
+return;
+
+}
+
+
+/* NÄCHSTER SPIELER */
+
+cur=
+(cur+1)%
+players.length;
+
+
+resetTurn();
+
+renderAll();
+
+};
+
+
+/* NEUER ZUG */
+
+function resetTurn(){
+
+dice=[
+1,1,1,1,1
+];
+
+held=[
+false,
+false,
+false,
+false,
+false
+];
+
+rolls=0;
+
+sel=null;
+
+selVal=null;
+
+}
+
+
+/* MENÜ */
+
+$('menuBtn').onclick=
+()=>modal.classList.add('open');
+
+
+$('closeMenuBtn').onclick=
+()=>modal.classList.remove('open');
+
+
+$('newGameBtn').onclick=
+()=>{
+
+if(
+confirm(
+'Aktuelles Spiel beenden?'
+)
+){
+
+modal.classList.remove('open');
+
+game.classList.remove('active');
+
+start.classList.add('active');
+
+confirmBar.style.display=
+'none';
+
+renderNames();
+
+}
+
+};
+
+
+modal.onclick=
+e=>{
+
+if(e.target===modal)
+modal.classList.remove('open');
+
+};
+
+
+/* HTML SICHER AUSGEBEN */
+
+function esc(s){
+
+return s.replace(
+/[&<>"']/g,
+m=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#039;'
+}[m])
+);
+
+}
+
+})();
 
 </script>
 
