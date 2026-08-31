@@ -4,18 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
 <title>Kniffel</title>
 
 <style>
+
 :root{
-  --bg:#f4f4f7;
-  --card:#fff;
-  --text:#111;
-  --muted:#6d6d72;
-  --line:#d9d9df;
-  --accent:#0a84ff;
-  --accentSoft:#e9f3ff;
-  --good:#198754;
+  --bg:#f2f5f7;
+  --card:#ffffff;
+  --text:#101820;
+  --muted:#68747d;
+  --line:#d5dde2;
+
+  --accent:#087f8c;
+  --accent2:#0a84ff;
+  --accentSoft:#e5f5f6;
+
+  --good:#18864b;
   --danger:#c9362b;
 }
 
@@ -29,11 +35,20 @@ html,body{
   min-height:100%;
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+  font-family:
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  sans-serif;
 }
 
 button,input{
   font:inherit;
+}
+
+button{
+  touch-action:manipulation;
 }
 
 .screen{
@@ -45,450 +60,979 @@ button,input{
   display:block;
 }
 
-/* STARTBILDSCHIRM */
+
+/* =========================
+   STARTSEITE
+========================= */
 
 .start-wrap{
+
   min-height:100vh;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   padding:24px;
+
 }
 
 .start-card{
+
   width:min(460px,100%);
+
   background:#fff;
+
   border-radius:24px;
+
   padding:28px 22px;
-  box-shadow:0 2px 10px #0001;
+
+  box-shadow:
+  0 4px 20px rgba(0,0,0,.08);
+
   text-align:center;
+
 }
 
 .logo{
-  font-size:54px;
+
+  font-size:58px;
+
 }
 
 .start-card h1{
-  margin:6px 0 4px;
-  font-size:34px;
+
+  margin:5px 0 4px;
+
+  font-size:36px;
+
 }
 
 .subtitle{
+
   color:var(--muted);
+
   margin-bottom:24px;
+
 }
 
 .label{
+
   text-align:left;
+
   font-size:14px;
+
   color:var(--muted);
+
   font-weight:800;
+
   margin:16px 0 8px;
+
 }
 
 .player-count{
+
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+
+  grid-template-columns:
+  repeat(4,1fr);
+
   gap:10px;
+
 }
 
 .count-btn{
-  border:2px solid var(--line);
+
+  border:
+  2px solid var(--line);
+
   background:#fff;
+
   border-radius:14px;
+
   padding:14px 0;
+
   font-size:19px;
+
   font-weight:900;
+
 }
 
 .count-btn.selected{
+
   border-color:var(--accent);
+
   background:var(--accentSoft);
+
   color:var(--accent);
+
 }
 
 .names{
+
   display:grid;
+
   gap:10px;
+
 }
 
 .names input{
+
   width:100%;
+
   padding:13px;
-  border:1px solid var(--line);
+
+  border:
+  1px solid var(--line);
+
   border-radius:13px;
+
   font-size:17px;
+
 }
 
 .primary{
+
   width:100%;
+
   margin-top:20px;
+
   border:0;
+
   border-radius:15px;
+
   padding:16px;
+
   background:var(--accent);
+
   color:white;
+
   font-weight:900;
+
   font-size:19px;
+
 }
 
-/* SPIEL */
+
+/* =========================
+   SPIEL
+========================= */
 
 .game{
-  max-width:760px;
+
+  max-width:900px;
+
   margin:auto;
-  padding-bottom:90px;
+
+  padding-bottom:95px;
+
 }
 
 .topbar{
+
   position:sticky;
+
   top:0;
+
   z-index:20;
-  background:#f4f4f7f2;
-  backdrop-filter:blur(10px);
-  padding:8px 10px 7px;
-  border-bottom:1px solid var(--line);
+
+  background:
+  rgba(242,245,247,.96);
+
+  backdrop-filter:
+  blur(12px);
+
+  padding:
+  8px 10px 8px;
+
+  border-bottom:
+  1px solid var(--line);
+
 }
 
 .turn-row{
+
   display:flex;
-  justify-content:space-between;
+
+  justify-content:
+  space-between;
+
   align-items:center;
+
   gap:10px;
-  margin-bottom:7px;
+
+  margin-bottom:8px;
+
 }
 
 .turn-label{
+
   font-size:12px;
+
   color:var(--muted);
+
   font-weight:800;
+
   text-transform:uppercase;
+
 }
 
 .turn-name{
-  font-size:21px;
+
+  font-size:22px;
+
   font-weight:950;
+
 }
 
 .roll-status{
+
   font-size:14px;
+
   color:var(--muted);
+
 }
 
-/* WÜRFEL */
+
+/* =========================
+   WÜRFEL
+========================= */
 
 .dice-row{
+
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:7px;
+
+  grid-template-columns:
+  repeat(5,1fr);
+
+  gap:8px;
+
 }
 
 .die{
+
   aspect-ratio:1;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   background:#fff;
-  border:2px solid transparent;
-  border-radius:13px;
-  box-shadow:0 2px 8px #0001;
-  font-size:clamp(34px,10vw,52px);
+
+  border:
+  3px solid transparent;
+
+  border-radius:15px;
+
+  box-shadow:
+  0 3px 12px rgba(0,0,0,.12);
+
+  /*
+  WICHTIG:
+  Auf iPhone ähnlich groß wie bisher,
+  auf iPad deutlich größer.
+  */
+
+  font-size:
+  clamp(
+    48px,
+    12vw,
+    110px
+  );
+
+  line-height:1;
+
   user-select:none;
+
+  transition:
+  transform .12s,
+  background .12s,
+  border-color .12s;
+
+}
+
+.die:active{
+
+  transform:
+  scale(.93);
+
 }
 
 .die.held{
-  border-color:var(--accent);
-  background:var(--accentSoft);
-  transform:translateY(-3px);
+
+  border-color:
+  var(--accent);
+
+  background:
+  var(--accentSoft);
+
+  transform:
+  translateY(-5px);
+
 }
 
 .die.disabled{
-  opacity:.45;
+
+  opacity:.42;
+
 }
 
+
+/* =========================
+   WÜRFEL-BUTTON
+========================= */
+
 .action-row{
+
   display:grid;
-  grid-template-columns:1fr 48px;
+
+  grid-template-columns:
+  1fr 50px;
+
   gap:8px;
-  margin-top:8px;
+
+  margin-top:9px;
+
 }
 
 .roll-btn{
+
   border:0;
+
   border-radius:13px;
-  padding:12px;
-  background:var(--accent);
+
+  padding:13px;
+
+  background:
+  var(--accent);
+
   color:#fff;
-  font-size:17px;
+
+  font-size:18px;
+
   font-weight:900;
+
+}
+
+.roll-btn:active{
+
+  transform:
+  scale(.98);
+
 }
 
 .menu-btn{
-  border:1px solid var(--line);
+
+  border:
+  1px solid var(--line);
+
   border-radius:13px;
+
   background:#fff;
-  font-size:21px;
+
+  font-size:22px;
+
 }
 
 .hint{
+
   text-align:center;
+
   color:var(--muted);
+
   font-size:12px;
-  margin-top:5px;
+
+  margin-top:6px;
+
   min-height:15px;
+
 }
 
-/* TABELLE */
+
+/* =========================
+   TABELLE
+========================= */
 
 .score-wrap{
-  padding:10px 8px 0;
+
+  padding:
+  10px 8px 0;
+
   overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
+
+  -webkit-overflow-scrolling:
+  touch;
+
 }
 
 table{
-  border-collapse:separate;
+
+  border-collapse:
+  separate;
+
   border-spacing:0;
+
   width:100%;
+
   min-width:410px;
+
   table-layout:fixed;
+
   background:#fff;
-  border:1px solid var(--line);
+
+  border:
+  1px solid var(--line);
+
   border-radius:15px;
+
   overflow:hidden;
-  box-shadow:0 2px 10px #0001;
+
+  box-shadow:
+  0 2px 12px rgba(0,0,0,.08);
+
 }
 
 th,td{
+
   height:40px;
-  border-right:1px solid var(--line);
-  border-bottom:1px solid var(--line);
+
+  border-right:
+  1px solid var(--line);
+
+  border-bottom:
+  1px solid var(--line);
+
   padding:0;
+
   text-align:center;
+
 }
 
 tr:last-child th,
 tr:last-child td{
+
   border-bottom:0;
+
 }
 
 th:last-child,
 td:last-child{
+
   border-right:0;
+
 }
+
+
+/* Kategorie links */
 
 .cat-col{
+
   width:110px;
+
   text-align:left;
-  padding:0 7px;
+
+  padding:
+  0 7px;
+
   font-size:12px;
+
   font-weight:900;
+
   background:#fafafa;
+
   position:sticky;
+
   left:0;
+
   z-index:4;
+
 }
 
+
+/* Spielernamen oben */
+
 .player-head{
+
   font-size:12px;
+
   font-weight:900;
+
   padding:5px 3px;
+
   background:#fafafa;
+
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
+
 }
 
 .player-head.current{
-  background:var(--accentSoft);
-  color:var(--accent);
+
+  background:
+  var(--accentSoft);
+
+  color:
+  var(--accent);
+
 }
 
+
+/* Punktzellen */
+
 .score-cell{
+
   font-size:15px;
+
   font-weight:850;
+
   background:#fff;
+
   min-width:75px;
+
 }
 
 .score-cell.current-col{
-  background:#fbfdff;
+
+  background:#fbffff;
+
 }
 
+
+/* mögliche Punktzahl */
+
 .score-cell.suggestion{
-  color:var(--accent);
-  background:var(--accentSoft);
+
+  color:
+  var(--accent);
+
+  background:
+  var(--accentSoft);
+
   cursor:pointer;
+
 }
 
 .score-cell.suggestion.zero{
+
   color:#9a9a9f;
+
 }
 
+
+/* ausgewählte Zelle */
+
 .score-cell.selected{
-  outline:3px solid var(--accent);
+
+  outline:
+  3px solid var(--accent);
+
   outline-offset:-3px;
-  background:#dcecff;
+
+  background:#d8f0f2;
+
 }
+
+
+/* Bereiche */
 
 .section-row .cat-col,
 .section-row td{
+
   height:29px;
-  background:#ececf1;
+
+  background:#e9eef1;
+
   font-size:11px;
+
   font-weight:900;
+
   text-transform:uppercase;
+
   color:#555;
+
 }
 
 .summary-row .cat-col,
 .summary-row td{
+
   height:33px;
-  background:#f7f7f9;
+
+  background:#f6f8f9;
+
   font-size:12px;
+
   font-weight:900;
+
 }
 
 .grand-row .cat-col,
 .grand-row td{
-  height:39px;
-  background:#efeff4;
+
+  height:40px;
+
+  background:#eaf0f2;
+
   font-size:14px;
+
   font-weight:950;
+
 }
 
-/* BESTÄTIGUNG UNTEN */
+
+/* =========================
+   BESTÄTIGUNG UNTEN
+========================= */
 
 .confirm-bar{
+
   position:fixed;
+
   left:0;
+
   right:0;
+
   bottom:0;
+
   z-index:18;
-  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
-  background:#f4f4f7f5;
-  border-top:1px solid var(--line);
+
+  padding:
+  8px 8px
+  calc(
+    8px +
+    env(safe-area-inset-bottom)
+  );
+
+  background:
+  rgba(242,245,247,.97);
+
+  border-top:
+  1px solid var(--line);
+
 }
 
 .confirm-inner{
-  max-width:744px;
+
+  max-width:884px;
+
   margin:auto;
+
   display:grid;
+
   gap:6px;
+
 }
 
 .selection-text{
+
   background:#fff;
-  border:1px solid var(--line);
+
+  border:
+  1px solid var(--line);
+
   border-radius:11px;
+
   padding:8px;
+
   text-align:center;
+
   color:var(--muted);
+
   font-size:13px;
+
 }
 
 .confirm-btn{
+
   border:0;
+
   border-radius:13px;
-  padding:13px;
+
+  padding:14px;
+
   background:var(--good);
+
   color:#fff;
+
   font-weight:900;
+
   font-size:17px;
+
 }
 
 .confirm-btn:disabled{
+
   background:#b9b9be;
+
 }
 
-/* MENÜ */
+.confirm-btn:active{
+
+  transform:
+  scale(.98);
+
+}
+
+
+/* =========================
+   MENÜ
+========================= */
 
 .modal{
+
   position:fixed;
+
   inset:0;
-  background:#0006;
+
+  background:
+  rgba(0,0,0,.4);
+
   display:none;
+
   align-items:flex-end;
+
   justify-content:center;
+
   z-index:50;
+
 }
 
 .modal.open{
+
   display:flex;
+
 }
 
 .sheet{
+
   width:min(560px,100%);
+
   background:#fff;
-  border-radius:22px 22px 0 0;
-  padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+
+  border-radius:
+  22px 22px 0 0;
+
+  padding:
+  18px 18px
+  calc(
+    18px +
+    env(safe-area-inset-bottom)
+  );
+
 }
 
 .sheet h2{
-  margin:0 0 12px;
+
+  margin:
+  0 0 12px;
+
 }
 
 .sheet button{
+
   width:100%;
+
   border:0;
+
   border-radius:13px;
+
   padding:14px;
+
   margin-top:9px;
+
   font-weight:850;
+
 }
 
 .secondary{
-  background:#efeff4;
+
+  background:#edf1f3;
+
 }
 
 .danger{
+
   background:#ffe8e6;
+
   color:var(--danger);
+
 }
+
+
+/* =========================
+   IPAD / GROSSE DISPLAYS
+========================= */
+
+@media
+(min-width:700px){
+
+  .topbar{
+
+    padding:
+    12px 18px 10px;
+
+  }
+
+  .dice-row{
+
+    gap:14px;
+
+  }
+
+  .die{
+
+    border-radius:20px;
+
+    /*
+    Noch etwas größer
+    speziell auf Tablets.
+    */
+
+    font-size:
+    clamp(
+      75px,
+      10vw,
+      125px
+    );
+
+  }
+
+  .turn-name{
+
+    font-size:26px;
+
+  }
+
+  .roll-btn{
+
+    font-size:20px;
+
+    padding:15px;
+
+  }
+
+  .score-wrap{
+
+    padding:
+    14px 12px 0;
+
+  }
+
+}
+
+
+/* iPhone */
+
+@media
+(max-width:430px){
+
+  .die{
+
+    font-size:
+    clamp(
+      46px,
+      13vw,
+      58px
+    );
+
+  }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
-<!-- START -->
 
-<section id="startScreen" class="screen active">
+<!-- =========================
+     START
+========================= -->
+
+<section
+id="startScreen"
+class="screen active"
+>
 
 <div class="start-wrap">
 
 <div class="start-card">
 
-<div class="logo">🎲</div>
+<div class="logo">
+🎲
+</div>
 
-<h1>Kniffel</h1>
+<h1>
+Kniffel
+</h1>
 
 <div class="subtitle">
 1 bis 4 Spieler
 </div>
 
+
 <div class="label">
 Anzahl Spieler
 </div>
 
+
 <div class="player-count">
 
-<button class="count-btn" data-count="1">1</button>
+<button
+class="count-btn"
+data-count="1"
+>
+1
+</button>
 
-<button class="count-btn" data-count="2">2</button>
+<button
+class="count-btn"
+data-count="2"
+>
+2
+</button>
 
-<button class="count-btn selected" data-count="3">3</button>
+<button
+class="count-btn selected"
+data-count="3"
+>
+3
+</button>
 
-<button class="count-btn" data-count="4">4</button>
+<button
+class="count-btn"
+data-count="4"
+>
+4
+</button>
 
 </div>
+
 
 <div class="label">
 Spielernamen
 </div>
 
-<div id="nameInputs" class="names"></div>
 
-<button id="startGameBtn" class="primary">
+<div
+id="nameInputs"
+class="names"
+>
+</div>
+
+
+<button
+id="startGameBtn"
+class="primary"
+>
 Spiel starten
 </button>
 
@@ -499,13 +1043,21 @@ Spiel starten
 </section>
 
 
-<!-- SPIEL -->
 
-<section id="gameScreen" class="screen">
+<!-- =========================
+     SPIEL
+========================= -->
+
+<section
+id="gameScreen"
+class="screen"
+>
 
 <div class="game">
 
+
 <div class="topbar">
+
 
 <div class="turn-row">
 
@@ -515,48 +1067,80 @@ Spiel starten
 Am Zug
 </div>
 
-<div id="turnName" class="turn-name"></div>
+<div
+id="turnName"
+class="turn-name"
+>
+</div>
 
 </div>
 
-<div id="rollStatus" class="roll-status"></div>
+
+<div
+id="rollStatus"
+class="roll-status"
+>
+</div>
 
 </div>
 
 
-<div id="diceRow" class="dice-row"></div>
+<div
+id="diceRow"
+class="dice-row"
+>
+</div>
 
 
 <div class="action-row">
 
-<button id="rollBtn" class="roll-btn">
+<button
+id="rollBtn"
+class="roll-btn"
+>
 Würfeln
 </button>
 
-<button id="menuBtn" class="menu-btn">
+
+<button
+id="menuBtn"
+class="menu-btn"
+>
 ⋯
 </button>
 
 </div>
 
 
-<div id="hint" class="hint"></div>
+<div
+id="hint"
+class="hint"
+>
+</div>
 
 </div>
+
 
 
 <div class="score-wrap">
 
-<table id="scoreTable"></table>
+<table
+id="scoreTable"
+>
+</table>
 
 </div>
+
 
 </div>
 
 </section>
 
 
-<!-- BESTÄTIGUNG -->
+
+<!-- =========================
+     BESTÄTIGUNG
+========================= -->
 
 <div
 id="confirmBar"
@@ -566,76 +1150,171 @@ style="display:none"
 
 <div class="confirm-inner">
 
+
 <div
 id="selectionText"
 class="selection-text"
 >
+
 Noch keine Kategorie gewählt
+
 </div>
+
 
 <button
 id="confirmBtn"
 class="confirm-btn"
 disabled
 >
+
 Eintragen & nächster Spieler
+
 </button>
 
-</div>
 
 </div>
 
+</div>
 
-<!-- MENÜ -->
 
-<div id="menuModal" class="modal">
+
+<!-- =========================
+     MENÜ
+========================= -->
+
+<div
+id="menuModal"
+class="modal"
+>
 
 <div class="sheet">
 
-<h2>Spiel</h2>
+<h2>
+Spiel
+</h2>
+
 
 <button
 id="closeMenuBtn"
 class="secondary"
 >
+
 Weiter spielen
+
 </button>
+
 
 <button
 id="newGameBtn"
 class="danger"
 >
+
 Neues Spiel starten
+
 </button>
 
 </div>
 
 </div>
+
 
 
 <script>
 
 (()=>{
 
+
+/* =========================
+   KATEGORIEN
+========================= */
+
 const cats=[
 
-{id:'ones',label:'Einser',sec:'u'},
-{id:'twos',label:'Zweier',sec:'u'},
-{id:'threes',label:'Dreier',sec:'u'},
-{id:'fours',label:'Vierer',sec:'u'},
-{id:'fives',label:'Fünfer',sec:'u'},
-{id:'sixes',label:'Sechser',sec:'u'},
+{
+id:'ones',
+label:'Einser',
+sec:'u'
+},
 
-{id:'threeKind',label:'Dreierpasch',sec:'l'},
-{id:'fourKind',label:'Viererpasch',sec:'l'},
-{id:'fullHouse',label:'Full House',sec:'l'},
-{id:'smallStraight',label:'Kl. Straße',sec:'l'},
-{id:'largeStraight',label:'Gr. Straße',sec:'l'},
-{id:'kniffel',label:'Kniffel',sec:'l'},
-{id:'chance',label:'Chance',sec:'l'}
+{
+id:'twos',
+label:'Zweier',
+sec:'u'
+},
+
+{
+id:'threes',
+label:'Dreier',
+sec:'u'
+},
+
+{
+id:'fours',
+label:'Vierer',
+sec:'u'
+},
+
+{
+id:'fives',
+label:'Fünfer',
+sec:'u'
+},
+
+{
+id:'sixes',
+label:'Sechser',
+sec:'u'
+},
+
+{
+id:'threeKind',
+label:'Dreierpasch',
+sec:'l'
+},
+
+{
+id:'fourKind',
+label:'Viererpasch',
+sec:'l'
+},
+
+{
+id:'fullHouse',
+label:'Full House',
+sec:'l'
+},
+
+{
+id:'smallStraight',
+label:'Kl. Straße',
+sec:'l'
+},
+
+{
+id:'largeStraight',
+label:'Gr. Straße',
+sec:'l'
+},
+
+{
+id:'kniffel',
+label:'Kniffel',
+sec:'l'
+},
+
+{
+id:'chance',
+label:'Chance',
+sec:'l'
+}
 
 ];
 
+
+
+/* =========================
+   SPIELSTATUS
+========================= */
 
 let pc=3;
 
@@ -645,7 +1324,11 @@ let scores=[];
 
 let cur=0;
 
-let dice=[1,1,1,1,1];
+
+let dice=[
+1,1,1,1,1
+];
+
 
 let held=[
 false,
@@ -655,6 +1338,7 @@ false,
 false
 ];
 
+
 let rolls=0;
 
 let sel=null;
@@ -662,80 +1346,391 @@ let sel=null;
 let selVal=null;
 
 
-const $=id=>
+
+/* =========================
+   DOM
+========================= */
+
+const $=
+id=>
 document.getElementById(id);
 
 
-const start=$('startScreen');
+const start=
+$('startScreen');
 
-const game=$('gameScreen');
+const game=
+$('gameScreen');
 
-const names=$('nameInputs');
+const names=
+$('nameInputs');
 
-const startBtn=$('startGameBtn');
+const startBtn=
+$('startGameBtn');
 
-const turnName=$('turnName');
+const turnName=
+$('turnName');
 
-const rollStatus=$('rollStatus');
+const rollStatus=
+$('rollStatus');
 
-const diceRow=$('diceRow');
+const diceRow=
+$('diceRow');
 
-const rollBtn=$('rollBtn');
+const rollBtn=
+$('rollBtn');
 
-const hint=$('hint');
+const hint=
+$('hint');
 
-const table=$('scoreTable');
+const table=
+$('scoreTable');
 
-const selText=$('selectionText');
+const selText=
+$('selectionText');
 
-const confirmBtn=$('confirmBtn');
+const confirmBtn=
+$('confirmBtn');
 
-const confirmBar=$('confirmBar');
+const confirmBar=
+$('confirmBar');
 
-const modal=$('menuModal');
+const modal=
+$('menuModal');
 
 
-/* SPIELERNAMEN */
+
+/* =========================
+   SOUND SYSTEM
+========================= */
+
+let audioCtx=null;
+
+
+function getAudio(){
+
+  if(!audioCtx){
+
+    const AudioContext=
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+    if(!AudioContext){
+      return null;
+    }
+
+    audioCtx=
+    new AudioContext();
+
+  }
+
+
+  if(
+    audioCtx.state==='suspended'
+  ){
+
+    audioCtx.resume();
+
+  }
+
+
+  return audioCtx;
+
+}
+
+
+
+/* kurzer Klick */
+
+function playClick(){
+
+  const ctx=
+  getAudio();
+
+  if(!ctx)
+  return;
+
+
+  const osc=
+  ctx.createOscillator();
+
+  const gain=
+  ctx.createGain();
+
+
+  osc.type=
+  'sine';
+
+  osc.frequency.setValueAtTime(
+    540,
+    ctx.currentTime
+  );
+
+  osc.frequency.exponentialRampToValueAtTime(
+    380,
+    ctx.currentTime+.06
+  );
+
+
+  gain.gain.setValueAtTime(
+    .09,
+    ctx.currentTime
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    ctx.currentTime+.07
+  );
+
+
+  osc.connect(gain);
+
+  gain.connect(
+    ctx.destination
+  );
+
+
+  osc.start();
+
+  osc.stop(
+    ctx.currentTime+.08
+  );
+
+}
+
+
+
+/* Bestätigungston */
+
+function playConfirm(){
+
+  const ctx=
+  getAudio();
+
+  if(!ctx)
+  return;
+
+
+  const notes=[
+    520,
+    700
+  ];
+
+
+  notes.forEach(
+  (freq,index)=>{
+
+
+    const osc=
+    ctx.createOscillator();
+
+    const gain=
+    ctx.createGain();
+
+
+    const start=
+    ctx.currentTime+
+    index*.07;
+
+
+    osc.type=
+    'sine';
+
+    osc.frequency.value=
+    freq;
+
+
+    gain.gain.setValueAtTime(
+      .001,
+      start
+    );
+
+    gain.gain.linearRampToValueAtTime(
+      .12,
+      start+.015
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      start+.12
+    );
+
+
+    osc.connect(gain);
+
+    gain.connect(
+      ctx.destination
+    );
+
+
+    osc.start(start);
+
+    osc.stop(
+      start+.13
+    );
+
+  });
+
+}
+
+
+
+/* Würfelgeräusch */
+
+function playRoll(){
+
+  const ctx=
+  getAudio();
+
+  if(!ctx)
+  return;
+
+
+  /*
+  Kurzes Rasseln aus mehreren
+  kleinen Geräuschimpulsen.
+  */
+
+  for(
+    let i=0;
+    i<10;
+    i++
+  ){
+
+    const time=
+    ctx.currentTime+
+    i*.025+
+    Math.random()*.015;
+
+
+    const osc=
+    ctx.createOscillator();
+
+    const gain=
+    ctx.createGain();
+
+
+    osc.type=
+    'triangle';
+
+
+    osc.frequency.value=
+    110+
+    Math.random()*260;
+
+
+    gain.gain.setValueAtTime(
+      .001,
+      time
+    );
+
+
+    gain.gain.linearRampToValueAtTime(
+      .06+
+      Math.random()*.05,
+      time+.006
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      time+.035
+    );
+
+
+    osc.connect(gain);
+
+    gain.connect(
+      ctx.destination
+    );
+
+
+    osc.start(time);
+
+    osc.stop(
+      time+.04
+    );
+
+  }
+
+}
+
+
+
+/* =========================
+   SPIELERNAMEN
+========================= */
 
 function renderNames(){
 
-names.innerHTML='';
+  names.innerHTML='';
 
-for(let i=0;i<pc;i++){
 
-let x=document.createElement('input');
+  for(
+    let i=0;
+    i<pc;
+    i++
+  ){
 
-x.value=`Spieler ${i+1}`;
+    let x=
+    document.createElement(
+      'input'
+    );
 
-x.maxLength=14;
 
-names.appendChild(x);
+    x.value=
+    `Spieler ${i+1}`;
+
+
+    x.maxLength=
+    14;
+
+
+    names.appendChild(x);
+
+  }
 
 }
 
-}
 
 
-/* SPIELERANZAHL */
+/* =========================
+   SPIELERANZAHL
+========================= */
 
 document
-.querySelectorAll('.count-btn')
-.forEach(b=>{
+.querySelectorAll(
+  '.count-btn'
+)
+.forEach(
+b=>{
+
 
 b.onclick=()=>{
 
-pc=+b.dataset.count;
+  playClick();
 
-document
-.querySelectorAll('.count-btn')
-.forEach(x=>
-x.classList.toggle(
-'selected',
-x===b
-)
-);
 
-renderNames();
+  pc=
+  +b.dataset.count;
+
+
+  document
+  .querySelectorAll(
+    '.count-btn'
+  )
+  .forEach(
+  x=>
+
+    x.classList.toggle(
+      'selected',
+      x===b
+    )
+
+  );
+
+
+  renderNames();
 
 };
 
@@ -745,792 +1740,1160 @@ renderNames();
 renderNames();
 
 
-/* SPIEL STARTEN */
+
+/* =========================
+   SPIEL STARTEN
+========================= */
 
 startBtn.onclick=()=>{
 
-players=[
-...names.querySelectorAll('input')
-].map(
-(x,i)=>
-x.value.trim() ||
-`Spieler ${i+1}`
-);
+  playConfirm();
 
 
-scores=players.map(
-()=>
-Object.fromEntries(
-cats.map(
-c=>[c.id,null]
-)
-)
-);
+  players=[
+    ...names
+    .querySelectorAll(
+      'input'
+    )
+  ]
+  .map(
+  (x,i)=>
+
+    x.value.trim() ||
+    `Spieler ${i+1}`
+
+  );
 
 
-cur=0;
+  scores=
+  players.map(
+  ()=>
 
-resetTurn();
+    Object.fromEntries(
+      cats.map(
+      c=>
+      [
+        c.id,
+        null
+      ]
+      )
+    )
 
-start.classList.remove('active');
+  );
 
-game.classList.add('active');
 
-confirmBar.style.display='block';
+  cur=0;
 
-renderAll();
+
+  resetTurn();
+
+
+  start
+  .classList
+  .remove(
+    'active'
+  );
+
+
+  game
+  .classList
+  .add(
+    'active'
+  );
+
+
+  confirmBar
+  .style
+  .display=
+  'block';
+
+
+  renderAll();
 
 };
 
 
-/* WÜRFEL AUSWERTEN */
+
+/* =========================
+   WÜRFELAUSWERTUNG
+========================= */
 
 function cnt(){
 
-let c=[
-0,0,0,0,0,0,0
-];
+  let c=[
+    0,0,0,0,0,0,0
+  ];
 
-dice.forEach(
-v=>c[v]++
-);
 
-return c;
+  dice.forEach(
+  v=>
+    c[v]++
+  );
+
+
+  return c;
 
 }
+
 
 
 function sum(){
 
-return dice.reduce(
-(a,b)=>a+b,
-0
-);
+  return dice.reduce(
+    (a,b)=>
+    a+b,
+    0
+  );
 
 }
+
 
 
 function small(){
 
-let s=[
-...new Set(dice)
-]
-.sort()
-.join('');
+  let s=[
+    ...new Set(dice)
+  ]
+  .sort()
+  .join('');
 
-return(
-s.includes('1234') ||
-s.includes('2345') ||
-s.includes('3456')
-);
+
+  return(
+
+    s.includes(
+      '1234'
+    )
+
+    ||
+
+    s.includes(
+      '2345'
+    )
+
+    ||
+
+    s.includes(
+      '3456'
+    )
+
+  );
 
 }
+
 
 
 function large(){
 
-let s=[
-...new Set(dice)
-]
-.sort()
-.join('');
+  let s=[
+    ...new Set(dice)
+  ]
+  .sort()
+  .join('');
 
-return(
-s==='12345' ||
-s==='23456'
-);
+
+  return(
+
+    s==='12345'
+
+    ||
+
+    s==='23456'
+
+  );
 
 }
 
 
-/* PUNKTE BERECHNEN */
+
+/* =========================
+   PUNKTE
+========================= */
 
 function val(id){
 
-let c=cnt();
+  let c=
+  cnt();
 
-let s=sum();
 
-switch(id){
+  let s=
+  sum();
 
-case'ones':
-return c[1];
 
-case'twos':
-return c[2]*2;
+  switch(id){
 
-case'threes':
-return c[3]*3;
 
-case'fours':
-return c[4]*4;
+  case'ones':
 
-case'fives':
-return c[5]*5;
+    return
+    c[1];
 
-case'sixes':
-return c[6]*6;
 
-case'threeKind':
-return c.some(n=>n>=3)
-?s
-:0;
+  case'twos':
 
-case'fourKind':
-return c.some(n=>n>=4)
-?s
-:0;
+    return
+    c[2]*2;
 
-case'fullHouse':
-return(
-c.includes(3) &&
-c.includes(2)
-)
-?25
-:0;
 
-case'smallStraight':
-return small()
-?30
-:0;
+  case'threes':
 
-case'largeStraight':
-return large()
-?40
-:0;
+    return
+    c[3]*3;
 
-case'kniffel':
-return c.includes(5)
-?50
-:0;
 
-case'chance':
-return s;
+  case'fours':
+
+    return
+    c[4]*4;
+
+
+  case'fives':
+
+    return
+    c[5]*5;
+
+
+  case'sixes':
+
+    return
+    c[6]*6;
+
+
+  case'threeKind':
+
+    return
+    c.some(
+      n=>n>=3
+    )
+    ?s
+    :0;
+
+
+  case'fourKind':
+
+    return
+    c.some(
+      n=>n>=4
+    )
+    ?s
+    :0;
+
+
+  case'fullHouse':
+
+    return(
+      c.includes(3)
+      &&
+      c.includes(2)
+    )
+    ?25
+    :0;
+
+
+  case'smallStraight':
+
+    return
+    small()
+    ?30
+    :0;
+
+
+  case'largeStraight':
+
+    return
+    large()
+    ?40
+    :0;
+
+
+  case'kniffel':
+
+    return
+    c.includes(5)
+    ?50
+    :0;
+
+
+  case'chance':
+
+    return s;
+
+  }
 
 }
 
-}
 
 
-/* SUMMEN */
+/* =========================
+   SUMMEN
+========================= */
 
 function upper(i){
 
-return[
-'ones',
-'twos',
-'threes',
-'fours',
-'fives',
-'sixes'
-]
-.reduce(
-(a,id)=>
-a+(scores[i][id]??0),
-0
-);
+  return[
+
+    'ones',
+    'twos',
+    'threes',
+    'fours',
+    'fives',
+    'sixes'
+
+  ]
+
+  .reduce(
+  (a,id)=>
+
+    a+
+    (
+      scores[i][id]
+      ??
+      0
+    ),
+
+  0
+  );
 
 }
+
 
 
 function bonus(i){
 
-return upper(i)>=63
-?35
-:0;
+  return
+  upper(i)>=63
+  ?35
+  :0;
 
 }
+
 
 
 function lower(i){
 
-return[
-'threeKind',
-'fourKind',
-'fullHouse',
-'smallStraight',
-'largeStraight',
-'kniffel',
-'chance'
-]
-.reduce(
-(a,id)=>
-a+(scores[i][id]??0),
-0
-);
+  return[
+
+    'threeKind',
+    'fourKind',
+    'fullHouse',
+    'smallStraight',
+    'largeStraight',
+    'kniffel',
+    'chance'
+
+  ]
+
+  .reduce(
+  (a,id)=>
+
+    a+
+    (
+      scores[i][id]
+      ??
+      0
+    ),
+
+  0
+  );
 
 }
+
 
 
 function total(i){
 
-return(
-upper(i)+
-bonus(i)+
-lower(i)
-);
+  return(
+
+    upper(i)
+    +
+    bonus(i)
+    +
+    lower(i)
+
+  );
 
 }
 
 
-/* WÜRFEL ZEICHNEN */
+
+/* =========================
+   WÜRFEL ZEICHNEN
+========================= */
 
 function renderDice(){
 
-diceRow.innerHTML='';
-
-dice.forEach(
-(v,i)=>{
-
-let d=
-document.createElement('div');
-
-d.className=
-'die'+
-(held[i]
-?' held'
-:'')+
-(rolls===0
-?' disabled'
-:'');
+  diceRow.innerHTML='';
 
 
-d.textContent=
-[
-'',
-'⚀',
-'⚁',
-'⚂',
-'⚃',
-'⚄',
-'⚅'
-][v];
+  dice.forEach(
+  (v,i)=>{
 
 
-d.onclick=()=>{
-
-if(
-rolls===0 ||
-rolls>=3
-)
-return;
-
-held[i]=!held[i];
-
-renderDice();
-
-};
+    let d=
+    document.createElement(
+      'div'
+    );
 
 
-diceRow.appendChild(d);
+    d.className=
+    'die'
+    +
+    (
+      held[i]
+      ?
+      ' held'
+      :
+      ''
+    )
+    +
+    (
+      rolls===0
+      ?
+      ' disabled'
+      :
+      ''
+    );
 
-});
+
+    d.textContent=
+    [
+      '',
+      '⚀',
+      '⚁',
+      '⚂',
+      '⚃',
+      '⚄',
+      '⚅'
+    ][v];
+
+
+    d.onclick=()=>{
+
+      if(
+        rolls===0
+        ||
+        rolls>=3
+      )
+      return;
+
+
+      playClick();
+
+
+      held[i]=
+      !held[i];
+
+
+      renderDice();
+
+    };
+
+
+    diceRow
+    .appendChild(d);
+
+  });
 
 }
 
 
-/* OBERER BEREICH */
+
+/* =========================
+   OBERER BEREICH
+========================= */
 
 function renderTop(){
 
-turnName.textContent=
-players[cur];
+  turnName.textContent=
+  players[cur];
 
 
-rollStatus.textContent=
-`Wurf ${rolls} / 3`;
+  rollStatus.textContent=
+  `Wurf ${rolls} / 3`;
 
 
-if(rolls===0){
+  if(
+    rolls===0
+  ){
 
-hint.textContent=
-'Drücke auf „Würfeln“.';
+    hint.textContent=
+    'Drücke auf „Würfeln“.';
 
-rollBtn.textContent=
-'Würfeln';
+
+    rollBtn.textContent=
+    'Würfeln';
+
+  }
+
+
+  else if(
+    rolls<3
+  ){
+
+    hint.textContent=
+    'Würfel antippen = behalten. Kategorie kann schon gewählt werden.';
+
+
+    rollBtn.textContent=
+    `Würfeln (${3-rolls} übrig)`;
+
+  }
+
+
+  else{
+
+    hint.textContent=
+    'Wähle jetzt eine freie Kategorie.';
+
+
+    rollBtn.textContent=
+    'Keine Würfe mehr';
+
+  }
+
+
+  rollBtn.disabled=
+  rolls>=3;
+
+
+  rollBtn.style.opacity=
+  rolls>=3
+  ?
+  '.5'
+  :
+  '1';
 
 }
 
-else if(rolls<3){
-
-hint.textContent=
-'Würfel antippen = behalten. Kategorie kann schon gewählt werden.';
-
-rollBtn.textContent=
-`Würfeln (${3-rolls} übrig)`;
-
-}
-
-else{
-
-hint.textContent=
-'Wähle jetzt eine freie Kategorie.';
-
-rollBtn.textContent=
-'Keine Würfe mehr';
-
-}
 
 
-rollBtn.disabled=
-rolls>=3;
-
-
-rollBtn.style.opacity=
-rolls>=3
-?'.5'
-:'1';
-
-}
-
-
-/* TABELLENZEILE */
+/* =========================
+   PUNKTZEILE
+========================= */
 
 function row(cat){
 
-let r=
-`<tr>
-<th class="cat-col">
-${cat.label}
-</th>`;
+  let r=
+  `<tr>
+  <th class="cat-col">
+  ${cat.label}
+  </th>`;
 
 
-players.forEach(
-(_,i)=>{
-
-let old=
-scores[i][cat.id];
-
-let isCur=
-i===cur;
+  players.forEach(
+  (_,i)=>{
 
 
-if(old!==null){
+    let old=
+    scores[i][cat.id];
 
-r+=
-`<td class="score-cell">
-${old}
-</td>`;
+
+    let isCur=
+    i===cur;
+
+
+    if(
+      old!==null
+    ){
+
+      r+=
+      `<td class="score-cell">
+      ${old}
+      </td>`;
+
+    }
+
+
+    else if(
+      isCur
+      &&
+      rolls>0
+    ){
+
+      let v=
+      val(cat.id);
+
+
+      r+=
+      `<td
+      class="
+      score-cell
+      suggestion
+      ${v===0?'zero':''}
+      ${sel===cat.id?'selected':''}
+      "
+      data-cat="${cat.id}"
+      data-val="${v}"
+      >
+      ${v}
+      </td>`;
+
+    }
+
+
+    else{
+
+      r+=
+      `<td
+      class="
+      score-cell
+      ${isCur?'current-col':''}
+      "
+      >
+      –
+      </td>`;
+
+    }
+
+  });
+
+
+  return
+  r+
+  '</tr>';
 
 }
 
-else if(
-isCur &&
-rolls>0
-){
-
-let v=
-val(cat.id);
 
 
-r+=
-`<td
-class="score-cell suggestion
-${v===0?'zero':''}
-${sel===cat.id?'selected':''}"
-data-cat="${cat.id}"
-data-val="${v}">
-${v}
-</td>`;
-
-}
-
-else{
-
-r+=
-`<td class="score-cell
-${isCur?'current-col':''}">
-–
-</td>`;
-
-}
-
-});
-
-
-return r+'</tr>';
-
-}
-
-
-/* SUMMENZEILE */
+/* =========================
+   SUMMENZEILEN
+========================= */
 
 function summary(
-label,
-fn,
-grand=false
+  label,
+  fn,
+  grand=false
 ){
 
-let r=
-`<tr class="
-${grand
-?'grand-row'
-:'summary-row'}
-">
-<th class="cat-col">
-${label}
-</th>`;
+  let r=
+  `<tr
+  class="
+  ${
+    grand
+    ?
+    'grand-row'
+    :
+    'summary-row'
+  }
+  "
+  >
+  <th class="cat-col">
+  ${label}
+  </th>`;
 
 
-players.forEach(
-(_,i)=>
-r+=
-`<td>
-${fn(i)}
-</td>`
-);
+  players.forEach(
+  (_,i)=>
+
+    r+=
+    `<td>
+    ${fn(i)}
+    </td>`
+
+  );
 
 
-return r+'</tr>';
+  return
+  r+
+  '</tr>';
 
 }
 
 
-/* TABELLE */
+
+/* =========================
+   TABELLE
+========================= */
 
 function renderTable(){
 
-let h=
-'<thead><tr>'+
-'<th class="cat-col">'+
-'Kategorie'+
-'</th>';
+  let h=
+  '<thead><tr>'+
+  '<th class="cat-col">'+
+  'Kategorie'+
+  '</th>';
 
 
-players.forEach(
-(p,i)=>
-h+=
-`<th class="player-head
-${i===cur?'current':''}">
-${esc(p)}
-</th>`
-);
+  players.forEach(
+  (p,i)=>
+
+    h+=
+    `<th
+    class="
+    player-head
+    ${i===cur?'current':''}
+    "
+    >
+    ${esc(p)}
+    </th>`
+
+  );
 
 
-h+=
-'</tr></thead><tbody>';
+  h+=
+  '</tr></thead><tbody>';
 
 
-h+=
-'<tr class="section-row">'+
-'<th class="cat-col">'+
-'Oberer Block'+
-'</th>'+
-players
-.map(()=>'<td></td>')
-.join('')+
-'</tr>';
+
+  h+=
+  '<tr class="section-row">'+
+  '<th class="cat-col">'+
+  'Oberer Block'+
+  '</th>'+
+  players
+  .map(
+    ()=>'<td></td>'
+  )
+  .join('')+
+  '</tr>';
 
 
-cats
-.filter(c=>c.sec==='u')
-.forEach(
-c=>h+=row(c)
-);
+
+  cats
+  .filter(
+    c=>c.sec==='u'
+  )
+  .forEach(
+    c=>
+    h+=row(c)
+  );
 
 
-h+=
-summary(
-'Zwischensumme',
-upper
-);
+
+  h+=
+  summary(
+    'Zwischensumme',
+    upper
+  );
 
 
-h+=
-summary(
-'Bonus ab 63',
-bonus
-);
+
+  h+=
+  summary(
+    'Bonus ab 63',
+    bonus
+  );
 
 
-h+=
-'<tr class="section-row">'+
-'<th class="cat-col">'+
-'Unterer Block'+
-'</th>'+
-players
-.map(()=>'<td></td>')
-.join('')+
-'</tr>';
+
+  h+=
+  '<tr class="section-row">'+
+  '<th class="cat-col">'+
+  'Unterer Block'+
+  '</th>'+
+  players
+  .map(
+    ()=>'<td></td>'
+  )
+  .join('')+
+  '</tr>';
 
 
-cats
-.filter(c=>c.sec==='l')
-.forEach(
-c=>h+=row(c)
-);
+
+  cats
+  .filter(
+    c=>c.sec==='l'
+  )
+  .forEach(
+    c=>
+    h+=row(c)
+  );
 
 
-h+=
-summary(
-'Gesamt',
-total,
-true
-);
+
+  h+=
+  summary(
+    'Gesamt',
+    total,
+    true
+  );
 
 
-h+='</tbody>';
+  h+=
+  '</tbody>';
 
 
-table.innerHTML=h;
+  table.innerHTML=
+  h;
 
 
-/* ANKLICKBARE VORSCHLÄGE */
 
-table
-.querySelectorAll('.suggestion')
-.forEach(
-td=>{
+  table
+  .querySelectorAll(
+    '.suggestion'
+  )
+  .forEach(
+  td=>{
 
-td.onclick=()=>{
 
-sel=
-td.dataset.cat;
+    td.onclick=()=>{
 
-selVal=
-+td.dataset.val;
+      playClick();
 
-renderTable();
 
-renderSelection();
+      sel=
+      td.dataset.cat;
 
-};
 
-});
+      selVal=
+      +td.dataset.val;
+
+
+      renderTable();
+
+
+      renderSelection();
+
+    };
+
+  });
 
 }
 
 
-/* AUSWAHL UNTEN */
+
+/* =========================
+   AUSWAHL UNTEN
+========================= */
 
 function renderSelection(){
 
-if(sel===null){
+  if(
+    sel===null
+  ){
 
-selText.textContent=
-'Noch keine Kategorie gewählt';
+    selText.textContent=
+    'Noch keine Kategorie gewählt';
 
-confirmBtn.disabled=
-true;
+
+    confirmBtn.disabled=
+    true;
+
+  }
+
+
+  else{
+
+    let c=
+    cats.find(
+      x=>x.id===sel
+    );
+
+
+    selText.textContent=
+    `${c.label}: ${selVal} Punkte eintragen`;
+
+
+    confirmBtn.disabled=
+    false;
+
+  }
 
 }
 
-else{
-
-let c=
-cats.find(
-x=>x.id===sel
-);
-
-selText.textContent=
-`${c.label}: ${selVal} Punkte eintragen`;
-
-confirmBtn.disabled=
-false;
-
-}
-
-}
 
 
-/* ALLES AKTUALISIEREN */
+/* =========================
+   ALLES ZEICHNEN
+========================= */
 
 function renderAll(){
 
-renderDice();
+  renderDice();
 
-renderTop();
+  renderTop();
 
-renderTable();
+  renderTable();
 
-renderSelection();
+  renderSelection();
 
 }
 
 
-/* WÜRFELN */
+
+/* =========================
+   WÜRFELN
+========================= */
 
 rollBtn.onclick=()=>{
 
-if(rolls>=3)
-return;
+  if(
+    rolls>=3
+  )
+  return;
 
 
-dice=dice.map(
-(v,i)=>
-held[i]
-?v
-:Math.floor(
-Math.random()*6
-)+1
-);
+  playRoll();
 
 
-rolls++;
+  dice=
+  dice.map(
+  (v,i)=>
 
-sel=null;
+    held[i]
+    ?
+    v
+    :
+    Math.floor(
+      Math.random()*6
+    )
+    +1
 
-selVal=null;
+  );
 
-renderAll();
+
+  rolls++;
+
+
+  sel=null;
+
+  selVal=null;
+
+
+  renderAll();
 
 };
 
 
-/* PUNKTE EINTRAGEN */
+
+/* =========================
+   PUNKTE EINTRAGEN
+========================= */
 
 confirmBtn.onclick=()=>{
 
-if(
-sel===null ||
-rolls===0
-)
-return;
+  if(
+    sel===null
+    ||
+    rolls===0
+  )
+  return;
 
 
-scores[cur][sel]=
-selVal;
+  playConfirm();
 
 
-/* SPIELENDE */
-
-if(
-scores.every(
-p=>
-cats.every(
-c=>
-p[c.id]!==null
-)
-)
-){
-
-renderAll();
-
-setTimeout(
-()=>{
-
-let result=
-players
-.map(
-(p,i)=>
-`${p}: ${total(i)} Punkte`
-)
-.join('\n');
+  scores[cur][sel]=
+  selVal;
 
 
-alert(
-'Spiel beendet!\n\n'+
-result
-);
 
-},
-100
-);
+  /* SPIELENDE */
 
-return;
+  if(
+    scores.every(
+    p=>
 
-}
+      cats.every(
+      c=>
+        p[c.id]!==null
+      )
 
+    )
+  ){
 
-/* NÄCHSTER SPIELER */
-
-cur=
-(cur+1)%
-players.length;
+    renderAll();
 
 
-resetTurn();
+    setTimeout(
+    ()=>{
 
-renderAll();
+
+      let result=
+      players
+      .map(
+      (p,i)=>
+        `${p}: ${total(i)} Punkte`
+      )
+      .join('\n');
+
+
+      alert(
+        'Spiel beendet!\n\n'
+        +
+        result
+      );
+
+    },
+    120
+    );
+
+
+    return;
+
+  }
+
+
+
+  /* NÄCHSTER SPIELER */
+
+  cur=
+  (cur+1)
+  %
+  players.length;
+
+
+  resetTurn();
+
+
+  renderAll();
 
 };
 
 
-/* NEUER ZUG */
+
+/* =========================
+   NEUER ZUG
+========================= */
 
 function resetTurn(){
 
-dice=[
-1,1,1,1,1
-];
+  dice=[
+    1,1,1,1,1
+  ];
 
-held=[
-false,
-false,
-false,
-false,
-false
-];
 
-rolls=0;
+  held=[
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
-sel=null;
 
-selVal=null;
+  rolls=0;
+
+  sel=null;
+
+  selVal=null;
 
 }
 
 
-/* MENÜ */
+
+/* =========================
+   MENÜ
+========================= */
 
 $('menuBtn').onclick=
-()=>modal.classList.add('open');
+()=>{
+
+  playClick();
+
+  modal
+  .classList
+  .add(
+    'open'
+  );
+
+};
+
 
 
 $('closeMenuBtn').onclick=
-()=>modal.classList.remove('open');
+()=>{
+
+  playClick();
+
+  modal
+  .classList
+  .remove(
+    'open'
+  );
+
+};
+
 
 
 $('newGameBtn').onclick=
 ()=>{
 
-if(
-confirm(
-'Aktuelles Spiel beenden?'
-)
-){
 
-modal.classList.remove('open');
+  playClick();
 
-game.classList.remove('active');
 
-start.classList.add('active');
+  if(
+    confirm(
+      'Aktuelles Spiel beenden?'
+    )
+  ){
 
-confirmBar.style.display=
-'none';
+    modal
+    .classList
+    .remove(
+      'open'
+    );
 
-renderNames();
 
-}
+    game
+    .classList
+    .remove(
+      'active'
+    );
+
+
+    start
+    .classList
+    .add(
+      'active'
+    );
+
+
+    confirmBar
+    .style
+    .display=
+    'none';
+
+
+    renderNames();
+
+  }
 
 };
+
 
 
 modal.onclick=
 e=>{
 
-if(e.target===modal)
-modal.classList.remove('open');
+  if(
+    e.target===modal
+  ){
+
+    playClick();
+
+    modal
+    .classList
+    .remove(
+      'open'
+    );
+
+  }
 
 };
 
 
-/* HTML SICHER AUSGEBEN */
+
+/* =========================
+   HTML SICHER AUSGEBEN
+========================= */
 
 function esc(s){
 
-return s.replace(
-/[&<>"']/g,
-m=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#039;'
-}[m])
-);
+  return s.replace(
+    /[&<>"']/g,
+    m=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#039;'
+    }[m])
+  );
 
 }
+
 
 })();
 
